@@ -3,164 +3,1234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>맞춤형 건강 식단 플랫폼</title>
+    <title>케어밀 - 우리 가족 맞춤 식단 관리</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-        header { position: relative; text-align: center; color: white; }
-        .carousel { position: relative; width: 100%; max-height: 500px; overflow: hidden; }
-        .carousel img { width: 100%; height: auto; display: none; }
-        .carousel img.active { display: block; }
-        header .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        header h1 { font-size: 2.5em; margin: 0; }
-        nav { display: flex; justify-content: center; background-color: #333; }
-        nav a { color: white; padding: 14px 20px; text-decoration: none; text-align: center; }
-        nav a:hover { background-color: #575757; }
-        .container { padding: 20px; }
-        .section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
-        footer { background-color: #222; color: white; text-align: center; padding: 10px; margin-top: 20px; }
-        .form-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
-        select, input[type='text'], input[type='number'], input[type='file'], textarea { padding: 5px; min-width: 180px; }
-        .ingredient-row { display: flex; gap: 10px; margin-bottom: 5px; }
-        .ingredient-row input { width: 80px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 14px;
+            color: #6c757d;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            background: white;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            background: #f8f9fa;
+            border: 3px dashed #667eea;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .camera-box:hover {
+            background: #e9ecef;
+            transform: scale(1.02);
+        }
+
+        .camera-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .tips {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tips h4 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .tips ul {
+            list-style: none;
+            color: #856404;
+            font-size: 13px;
+        }
+
+        .tips li {
+            margin: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tips li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            margin-top: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 13px;
+            width: auto;
+            display: inline-block;
+        }
+
+        .ingredients-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+
+        .ingredients-list h4 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .ingredient-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 13px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .ingredient-check {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #28a745;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #28a745;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .add-ingredient-form {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 15px;
+            border: 2px dashed #667eea;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            color: #495057;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-row input {
+            flex: 2;
+        }
+
+        .input-row input[type="number"] {
+            flex: 1;
+        }
+
+        .input-row select {
+            flex: 1;
+        }
+
+        .alert {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #0c5460;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .alert.warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .family-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .family-members-scroll {
+            flex: 1;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-right: 10px;
+        }
+
+        .member-pill {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-right: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .member-pill.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .dropdown-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .member-detail {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-section {
+            margin-bottom: 15px;
+        }
+
+        .detail-section h4 {
+            font-size: 14px;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .detail-item label {
+            display: block;
+            color: #6c757d;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .detail-item-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .detail-item-row select, .detail-item-row input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .recipe-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .recipe-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .recipe-card.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .recipe-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #212529;
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #495057;
+        }
+
+        .meta-tag.good {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .meta-tag.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .recommendation-note {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #495057;
+        }
+
+        .profile-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #212529;
+        }
+
+        .profile-icon {
+            font-size: 40px;
+        }
+
+        .profile-info-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .info-box-title {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .info-box-content {
+            font-size: 14px;
+            color: #212529;
+            font-weight: 500;
+        }
+
+        .meal-history {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+
+        .meal-history h4 {
+            font-size: 14px;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .meal-time-slot {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .meal-time-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .meal-time-title {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .meal-calories {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .meal-items {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .stats-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ 케어밀</h1>
+            <p>우리 가족 맞춤 건강 식단 관리</p>
+        </div>
 
-<header>
-    <div class="carousel">
-        <img src="images/korean_dish.jpg" class="active" alt="한식 요리">
-        <img src="images/chinese_dish.jpg" alt="중식 요리">
-        <img src="images/japanese_dish.jpg" alt="일식 요리">
-        <img src="images/western_dish.jpg" alt="양식 요리">
+        <div class="tabs">
+            <button class="tab active" onclick="showScreen('scan')">냉장고 스캔</button>
+            <button class="tab" onclick="showScreen('recipe')">오늘 식단</button>
+            <button class="tab" onclick="showScreen('diary')">식사 기록</button>
+            <button class="tab" onclick="showScreen('profile')">프로필</button>
+        </div>
+
+        <div class="content">
+            <!-- 냉장고 스캔 화면 -->
+            <div class="screen active" id="scan">
+                <div class="camera-box" onclick="document.getElementById('fileInput').click()">
+                    <div class="camera-icon">📷</div>
+                    <h3>냉장고를 촬영해주세요</h3>
+                    <p style="color: #6c757d; font-size: 14px; margin-top: 10px;">
+                        칸별로 나눠 찍으면 인식률이 좋아요
+                    </p>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" capture="environment" onchange="handleImageUpload(event)">
+
+                <div class="tips">
+                    <h4>💡 촬영 팁</h4>
+                    <ul>
+                        <li>냉장고 조명을 켜고 찍어주세요</li>
+                        <li>재료가 겹치지 않게 배치해주세요</li>
+                        <li>냉장실, 냉동실을 따로 촬영하세요</li>
+                        <li>유통기한이 보이면 더 정확해요</li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-primary" onclick="simulateScan()">
+                    📸 냉장고 촬영하기
+                </button>
+                <button class="btn btn-secondary">
+                    📁 갤러리에서 선택
+                </button>
+
+                <div id="scanResult" style="display: none; margin-top: 20px;">
+                    <div class="alert success">
+                        ✓ 냉장고 분석 완료! 5개 재료를 인식했어요
+                    </div>
+                    
+                    <div class="ingredients-list">
+                        <h4>✅ 보유 재료</h4>
+                        <div class="ingredient-item">
+                            <div style="display: flex; align-items: center; flex: 1;">
+                                <div class="ingredient-check">✓</div>
+                                <span>닭가슴살</span>
+                            </div>
+                            <span style="color: #667eea; font-weight: bold;">400g</span>
+                        </div>
+                        <div class="ingredient-item">
+                            <div style="display: flex; align-items: center; flex: 1;">
+                                <div class="ingredient-check">✓</div>
+                                <span>브로콜리</span>
+                            </div>
+                            <span style="color: #667eea; font-weight: bold;">1개</span>
+                        </div>
+                        <div class="ingredient-item">
+                            <div style="display: flex; align-items: center; flex: 1;">
+                                <div class="ingredient-check">✓</div>
+                                <span>당근</span>
+                            </div>
+                            <span style="color: #667eea; font-weight: bold;">2개</span>
+                        </div>
+                        <div class="ingredient-item">
+                            <div style="display: flex; align-items: center; flex: 1;">
+                                <div class="ingredient-check">✓</div>
+                                <span>양파</span>
+                            </div>
+                            <span style="color: #667eea; font-weight: bold;">3개</span>
+                        </div>
+                        <div class="ingredient-item">
+                            <div style="display: flex; align-items: center; flex: 1;">
+                                <div class="ingredient-check">✓</div>
+                                <span>계란</span>
+                            </div>
+                            <span style="color: #667eea; font-weight: bold;">6개</span>
+                        </div>
+                    </div>
+
+                    <div class="add-ingredient-form">
+                        <h4 style="margin-bottom: 15px; color: #495057;">➕ 재료 직접 추가하기</h4>
+                        
+                        <div class="input-group">
+                            <label>재료 이름</label>
+                            <input type="text" id="ingredientName" placeholder="예: 두부, 시금치, 고등어">
+                        </div>
+
+                        <div class="input-group">
+                            <label>수량 및 단위</label>
+                            <div class="input-row">
+                                <input type="number" id="ingredientAmount" placeholder="수량" min="0" step="0.1">
+                                <select id="ingredientUnit">
+                                    <option value="개">개</option>
+                                    <option value="kg">kg</option>
+                                    <option value="g">g</option>
+                                    <option value="L">L</option>
+                                    <option value="ml">ml</option>
+                                    <option value="단">단</option>
+                                    <option value="마리">마리</option>
+                                    <option value="봉지">봉지</option>
+                                    <option value="팩">팩</option>
+                                    <option value="모">모</option>
+                                    <option value="컵">컵</option>
+                                    <option value="스푼">스푼</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="addIngredient()">
+                            추가하기
+                        </button>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showScreen('recipe')" style="margin-top: 20px;">
+                        🍳 오늘 식단 추천 받기
+                    </button>
+                </div>
+            </div>
+
+            <!-- 오늘 식단 화면 -->
+            <div class="screen" id="recipe">
+                <div class="family-selector">
+                    <div class="family-members-scroll">
+                        <span class="member-pill active" onclick="selectMember(this, 'mother')">👵 어머니</span>
+                        <span class="member-pill" onclick="selectMember(this, 'father')">👨 아버지</span>
+                        <span class="member-pill" onclick="selectMember(this, 'wife')">👩 며느리</span>
+                    </div>
+                    <button class="dropdown-btn" onclick="openMemberModal()">+</button>
+                </div>
+
+                <div class="member-detail" id="memberDetail">
+                    <div class="detail-section">
+                        <h4>📊 오늘 컨디션</h4>
+                        <div class="detail-item">
+                            <div class="detail-item-row">
+                                <select id="condition">
+                                    <option>좋음</option>
+                                    <option>보통</option>
+                                    <option>피곤함</option>
+                                    <option>컨디션 안좋음</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>🏃 운동량</h4>
+                        <div class="detail-item">
+                            <label>오늘 활동</label>
+                            <div class="detail-item-row">
+                                <select id="exercise">
+                                    <option>안 함</option>
+                                    <option>가벼운 산책 (30분)</option>
+                                    <option>중간 운동 (1시간)</option>
+                                    <option>격렬한 운동 (1시간+)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <label>소모 칼로리</label>
+                            <input type="number" placeholder="예: 150" style="width: 100%; padding: 8px; border: 1px solid #e9ecef; border-radius: 8px;">
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>🍽️ 오늘 식사 기록</h4>
+                        <div class="detail-item">
+                            <label>아침</label>
+                            <div class="detail-item-row">
+                                <input type="text" placeholder="메뉴 입력" id="breakfast">
+                                <input type="number" placeholder="칼로리" style="width: 80px;">
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <label>점심</label>
+                            <div class="detail-item-row">
+                                <input type="text" placeholder="메뉴 입력" id="lunch" value="삼겹살 200g, 소주 2잔">
+                                <input type="number" placeholder="칼로리" value="900" style="width: 80px;">
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <label>간식</label>
+                            <div class="detail-item-row">
+                                <input type="text" placeholder="메뉴 입력" id="snack">
+                                <input type="number" placeholder="칼로리" style="width: 80px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="generateRecommendation()">
+                        🎯 맞춤 메뉴 추천받기
+                    </button>
+                </div>
+
+                <div id="recommendationArea" style="display: none; margin-top: 20px;">
+                    <div class="alert warning">
+                        ⚠️ 점심에 고칼로리 식사를 하셨네요. 저녁은 가볍게 추천드려요!
+                    </div>
+
+                    <h3 style="margin-bottom: 15px; color: #495057;">추천 메뉴 (3가지)</h3>
+
+                    <div class="recipe-card" onclick="selectRecipe(this, 1)">
+                        <div class="recipe-image">🥗</div>
+                        <div class="recipe-title">닭가슴살 샐러드</div>
+                        <div class="recipe-meta">
+                            <span class="meta-tag good">혈당 영향 낮음</span>
+                            <span class="meta-tag">단백질 25g</span>
+                            <span class="meta-tag good">칼로리 280kcal</span>
+                        </div>
+                        <div class="recommendation-note">
+                            💡 점심 과식을 고려해 저칼로리 식단을 추천합니다. 당뇨에도 안전하고 영양소가 균형잡힌 메뉴에요.
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="selectRecipe(this, 2)">
+                        <div class="recipe-image">🍲</div>
+                        <div class="recipe-title">두부 야채찌개</div>
+                        <div class="recipe-meta">
+                            <span class="meta-tag good">혈당 영향 낮음</span>
+                            <span class="meta-tag">단백질 18g</span>
+                            <span class="meta-tag">칼로리 320kcal</span>
+                        </div>
+                        <div class="recommendation-note">
+                            💡 따뜻한 국물 요리로 포만감이 좋아요. 나트륨을 줄인 레시피입니다.
+                        </div>
+                    </div>
+
+                    <div class="recipe-card" onclick="selectRecipe(this, 3)">
+                        <div class="recipe-image">🍗</div>
+                        <div class="recipe-title">닭가슴살 야채볶음</div>
+                        <div class="recipe-meta">
+                            <span class="meta-tag good">혈당 영향 중간</span>
+                            <span class="meta-tag">단백질 30g</span>
+                            <span class="meta-tag warning">칼로리 400kcal</span>
+                        </div>
+                        <div class="recommendation-note">
+                            💡 단백질이 풍부한 메뉴입니다. 점심 과식으로 칼로리가 약간 높을 수 있어요.
+                        </div>
+                    </div>
+
+                    <div id="selectedRecipeDetail" style="display: none; margin-top: 20px;">
+                        <div class="alert success">
+                            ✓ 닭가슴살 샐러드를 선택하셨습니다!
+                        </div>
+                        <button class="btn btn-primary">🍳 요리 시작하기</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 식사 기록 화면 -->
+            <div class="screen" id="diary">
+                <div class="family-selector" style="margin-bottom: 20px;">
+                    <div class="family-members-scroll">
+                        <span class="member-pill active" onclick="showDiary(this, 'mother')">👵 어머니</span>
+                        <span class="member-pill" onclick="showDiary(this, 'father')">👨 아버지</span>
+                        <span class="member-pill" onclick="showDiary(this, 'wife')">👩 며느리</span>
+                    </div>
+                </div>
+
+                <div id="diaryContent">
+                    <div class="stats-summary">
+                        <h3 style="margin-bottom: 5px;">👵 어머니 - 오늘의 식사</h3>
+                        <p style="font-size: 12px; opacity: 0.9;">2024년 11월 19일</p>
+                        <div class="stats-row">
+                            <div class="stat-item">
+                                <div class="stat-value">1,240</div>
+                                <div class="stat-label">섭취 칼로리</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">760</div>
+                                <div class="stat-label">남은 칼로리</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">62%</div>
+                                <div class="stat-label">목표 달성</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="meal-history">
+                        <h4>오늘 식사 내역</h4>
+                        
+                        <div class="meal-time-slot">
+                            <div class="meal-time-header">
+                                <span class="meal-time-title">🌅 아침 (8:00)</span>
+                                <span class="meal-calories">340 kcal</span>
+                            </div>
+                            <div class="meal-items">죽 1그릇, 김치</div>
+                            <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #f8f9fa; font-size: 11px; color: #6c757d;">
+                                탄수화물 40g · 단백질 8g · 나트륨 800mg
+                            </div>
+                        </div>
+
+                        <div class="meal-time-slot">
+                            <div class="meal-time-header">
+                                <span class="meal-time-title">🌞 점심 (12:30)</span>
+                                <span class="meal-calories" style="color: #dc3545;">900 kcal</span>
+                            </div>
+                            <div class="meal-items">삼겹살 200g, 소주 2잔, 된장찌개</div>
+                            <div style="margin-top: 8px; padding: 8px; background: #fff3cd; border-radius: 8px; font-size: 12px; color: #856404;">
+                                ⚠️ 과식 주의! 평소보다 300kcal 초과
+                            </div>
+                        </div>
+
+                        <div class="meal-time-slot" style="border: 2px dashed #dee2e6; background: #f8f9fa;">
+                            <div class="meal-time-header">
+                                <span class="meal-time-title">🌙 저녁 (예정)</span>
+                                <span class="meal-calories">추천 350 kcal</span>
+                            </div>
+                            <div class="meal-items" style="color: #6c757d;">아직 식사 전입니다</div>
+                        </div>
+
+                        <div class="meal-time-slot" style="border: 2px dashed #dee2e6; background: #f8f9fa;">
+                            <div class="meal-time-header">
+                                <span class="meal-time-title">🍪 간식</span>
+                                <span class="meal-calories">- kcal</span>
+                            </div>
+                            <div class="meal-items" style="color: #6c757d;">간식 없음</div>
+                        </div>
+                    </div>
+
+                    <div class="alert warning" style="margin-top: 20px;">
+                        💡 <strong>영양사 조언</strong><br>
+                        오늘 나트륨 섭취량이 높아요 (3,200mg / 목표 2,000mg). 저녁에는 저염 식단을 추천드려요!
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 15px; margin-top: 15px;">
+                        <h4 style="margin-bottom: 10px; color: #495057;">주간 평균 비교</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center;">
+                                <div style="font-size: 20px; font-weight: bold; color: #667eea;">1,850</div>
+                                <div style="font-size: 12px; color: #6c757d;">평균 칼로리</div>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center;">
+                                <div style="font-size: 20px; font-weight: bold; color: #28a745;">5/7</div>
+                                <div style="font-size: 12px; color: #6c757d;">목표 달성 일수</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 프로필 화면 -->
+            <div class="screen" id="profile">
+                <div class="family-selector" style="margin-bottom: 20px;">
+                    <div class="family-members-scroll">
+                        <span class="member-pill active" onclick="showProfile(this, 'mother')">👵 어머니</span>
+                        <span class="member-pill" onclick="showProfile(this, 'father')">👨 아버지</span>
+                        <span class="member-pill" onclick="showProfile(this, 'wife')">👩 며느리</span>
+                    </div>
+                    <button class="dropdown-btn" onclick="openMemberModal()">+</button>
+                </div>
+
+                <div id="profileContent">
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div>
+                                <div class="profile-name">👵 김영희</div>
+                                <div style="font-size: 14px; color: #6c757d; margin-top: 5px;">72세 · 여성</div>
+                            </div>
+                            <div class="profile-icon">👵</div>
+                        </div>
+
+                        <div class="profile-info-grid">
+                            <div class="info-box">
+                                <div class="info-box-title">📍 만성질환</div>
+                                <div class="info-box-content">제2형 당뇨병 (10년차)</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-box-title">💊 복용 약물</div>
+                                <div class="info-box-content">메트포르민 500mg (하루 2회)</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-box-title">🚫 알레르기</div>
+                                <div class="info-box-content">새우, 게, 조개류</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-box-title">🍽️ 식이 제한</div>
+                                <div class="info-box-content">저염식, 당류 제한, 혈당관리</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-box-title">🎯 일일 목표</div>
+                                <div class="info-box-content">칼로리: 1,800 kcal · 나트륨: 2,000mg 이하</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-box-title">🏃 활동 수준</div>
+                                <div class="info-box-content">낮음 (주 3회 산책 30분)</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-box-title">⌚ 연동 기기</div>
+                                <div class="info-box-content">갤럭시 워치 5 · 혈당측정기</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-box-title">📊 최근 혈당</div>
+                                <div class="info-box-content">공복 125 mg/dL · 식후 160 mg/dL</div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" style="margin-top: 15px;">
+                            ✏️ 프로필 수정하기
+                        </button>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 15px; margin-top: 15px;">
+                        <h4 style="margin-bottom: 15px; color: #495057;">⚙️ 설정</h4>
+                        <div style="padding: 12px; background: white; border-radius: 10px; margin-bottom: 10px; cursor: pointer;">
+                            📱 웨어러블 디바이스 연동
+                        </div>
+                        <div style="padding: 12px; background: white; border-radius: 10px; margin-bottom: 10px; cursor: pointer;">
+                            🔔 알림 설정
+                        </div>
+                        <div style="padding: 12px; background: white; border-radius: 10px; margin-bottom: 10px; cursor: pointer;">
+                            👨‍⚕️ 영양사 상담 신청
+                        </div>
+                        <div style="padding: 12px; background: white; border-radius: 10px; cursor: pointer;">
+                            💳 구독 관리 (프리미엄 플랜)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="overlay">
-        <h1>당신의 건강, AI가 맞춤으로 요리합니다</h1>
+
+    <!-- 가족 구성원 추가 모달 -->
+    <div class="modal" id="memberModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>가족 구성원 추가</h3>
+                <button class="modal-close" onclick="closeMemberModal()">×</button>
+            </div>
+            <div class="input-group">
+                <label>관계</label>
+                <select id="newMemberRelation">
+                    <option>자녀1</option>
+                    <option>자녀2</option>
+                    <option>자녀3</option>
+                    <option>배우자</option>
+                    <option>부모님</option>
+                    <option>조부모님</option>
+                    <option>기타</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>이름</label>
+                <input type="text" id="newMemberName" placeholder="이름 입력">
+            </div>
+            <div class="input-group">
+                <label>나이</label>
+                <input type="number" id="newMemberAge" placeholder="나이 입력">
+            </div>
+            <button class="btn btn-primary" onclick="addMember()">추가하기</button>
+        </div>
     </div>
-</header>
 
-<nav>
-    <a href="#about">소개</a>
-    <a href="#recipe">오늘 요리레시피</a>
-    <a href="#how">이용 방법</a>
-    <a href="#contact">문의</a>
-</nav>
+    <script>
+        let ingredients = [
+            { name: '닭가슴살', amount: 400, unit: 'g' },
+            { name: '브로콜리', amount: 1, unit: '개' },
+            { name: '당근', amount: 2, unit: '개' },
+            { name: '양파', amount: 3, unit: '개' },
+            { name: '계란', amount: 6, unit: '개' }
+        ];
 
-<div class="container">
-    <section id="about" class="section">
-        <h2>플랫폼 소개</h2>
-        <p>사용자의 건강 정보, 운동량, 보유 재료 기반으로 AI가 식단과 요리법을 추천하며, 사진 피드백까지 제공합니다.</p>
-    </section>
+        let currentMember = 'mother';
+        let selectedRecipe = null;
 
-    <section id="recipe" class="section">
-        <h2>오늘 요리레시피 지정</h2>
-        <div class="form-row">
-            <div>
-                <label for="cuisine-select">요리 스타일 선택:</label><br>
-                <select id="cuisine-select" multiple>
-                    <option>한식</option>
-                    <option>중식</option>
-                    <option>일식</option>
-                    <option>양식</option>
-                </select>
-            </div>
-            <div>
-                <label for="cook-type-select">조리 종류 선택:</label><br>
-                <select id="cook-type-select" multiple>
-                    <option>일반식</option>
-                    <option>연하식</option>
-                    <option>이유식</option>
-                    <option>간편식</option>
-                </select>
-            </div>
-        </div>
+        function showScreen(screenName) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(screenName).classList.add('active');
+            event.target.classList.add('active');
+        }
 
-        <div class="form-row">
-            <div>
-                <label for="fridge-photo">냉장고 사진 업로드:</label><br>
-                <input type="file" id="fridge-photo" accept="image/*">
-            </div>
-            <div>
-                <label for="manual-ingredients">추가 재료 입력:</label><br>
-                <input type="text" id="manual-ingredients" placeholder="재료명, 수량, 단위 입력">
-            </div>
-        </div>
+        function simulateScan() {
+            const scanResult = document.getElementById('scanResult');
+            const cameraBox = document.querySelector('.camera-box');
+            
+            cameraBox.style.background = '#d4edda';
+            cameraBox.innerHTML = '<div style="font-size: 50px;">✓</div><h3 style="color: #155724;">분석 중...</h3>';
+            
+            setTimeout(() => {
+                scanResult.style.display = 'block';
+                scanResult.scrollIntoView({ behavior: 'smooth' });
+            }, 1500);
+        }
 
-        <h3>재료 상세 입력</h3>
-        <div id="ingredient-list">
-            <div class="ingredient-row">
-                <input type="text" placeholder="재료명">
-                <input type="number" placeholder="수량">
-                <select>
-                    <option>개</option>
-                    <option>마리</option>
-                    <option>g</option>
-                    <option>kg</option>
-                    <option>ml</option>
-                    <option>L</option>
-                </select>
-            </div>
-        </div>
-        <button onclick="addIngredientRow()">재료 추가</button>
+        function handleImageUpload(event) {
+            if (event.target.files && event.target.files[0]) {
+                simulateScan();
+            }
+        }
 
-        <h3>추천 및 필요한 재료</h3>
-        <p>AI가 가지고 있는 재료로 최대한 레시피를 만들어주고, 범용 재료와 꼭 사야 할 재료를 안내합니다.</p>
+        function addIngredient() {
+            const name = document.getElementById('ingredientName').value;
+            const amount = document.getElementById('ingredientAmount').value;
+            const unit = document.getElementById('ingredientUnit').value;
 
-        <h3>완성 후 사진 업로드</h3>
-        <input type="file" id="completed-dish" accept="image/*"><br>
-        <label for="feedback">피드백 입력:</label><br>
-        <textarea id="feedback" rows="3" cols="50" placeholder="맛, 양, 난이도 등 피드백"></textarea>
-    </section>
+            if (!name || !amount) {
+                alert('재료 이름과 수량을 모두 입력해주세요.');
+                return;
+            }
 
-    <section id="how" class="section">
-        <h2>이용 방법</h2>
-        <ol>
-            <li>핸드폰이나 컴퓨터로 로그인</li>
-            <li>건강 정보 및 운동량 입력</li>
-            <li>보유 재료 입력 및 냉장고 사진 업로드</li>
-            <li>AI 추천 레시피 확인 후 조리 시작</li>
-            <li>필요 재료 쇼핑몰 주문</li>
-            <li>완성 요리 사진 업로드 및 피드백</li>
-        </ol>
-    </section>
+            ingredients.push({ name, amount: parseFloat(amount), unit });
 
-    <section id="contact" class="section">
-        <h2>문의</h2>
-        <p>이메일: support@healthrecipe.ai</p>
-        <p>전화: 010-1234-5678</p>
-    </section>
-</div>
+            const ingredientsList = document.querySelector('.ingredients-list');
+            const newItem = document.createElement('div');
+            newItem.className = 'ingredient-item';
+            newItem.innerHTML = `
+                <div style="display: flex; align-items: center; flex: 1;">
+                    <div class="ingredient-check">✓</div>
+                    <span>${name}</span>
+                </div>
+                <span style="color: #667eea; font-weight: bold;">${amount}${unit}</span>
+            `;
+            ingredientsList.appendChild(newItem);
 
-<footer>
-    <p>&copy; 2025 AI 건강 식단 플랫폼. All rights reserved.</p>
-</footer>
+            document.getElementById('ingredientName').value = '';
+            document.getElementById('ingredientAmount').value = '';
+            
+            alert(`${name} ${amount}${unit}이(가) 추가되었습니다!`);
+        }
 
-<script>
-function addIngredientRow() {
-    const container = document.getElementById('ingredient-list');
-    const row = document.createElement('div');
-    row.className = 'ingredient-row';
-    row.innerHTML = `<input type='text' placeholder='재료명'>
-                     <input type='number' placeholder='수량'>
-                     <select>
-                        <option>개</option>
-                        <option>마리</option>
-                        <option>g</option>
-                        <option>kg</option>
-                        <option>ml</option>
-                        <option>L</option>
-                     </select>`;
-    container.appendChild(row);
-}
+        function selectMember(element, member) {
+            document.querySelectorAll('.member-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            element.classList.add('active');
+            currentMember = member;
+            
+            // 선택한 구성원에 따라 기본값 변경 가능
+            if (member === 'mother') {
+                document.getElementById('lunch').value = '삼겹살 200g, 소주 2잔';
+            } else if (member === 'wife') {
+                document.getElementById('lunch').value = '샌드위치';
+            }
+        }
 
-// 캐러셀 자동 전환
-let currentSlide = 0;
-const slides = document.querySelectorAll('.carousel img');
-setInterval(() => {
-    slides[currentSlide].classList.remove('active');
-    currentSlide = (currentSlide + 1) % slides.length;
-    slides[currentSlide].classList.add('active');
-}, 4000);
-</script>
+        function generateRecommendation() {
+            const recommendationArea = document.getElementById('recommendationArea');
+            recommendationArea.style.display = 'block';
+            recommendationArea.scrollIntoView({ behavior: 'smooth' });
+        }
 
+        function selectRecipe(element, recipeId) {
+            document.querySelectorAll('.recipe-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedRecipe = recipeId;
+            
+            document.getElementById('selectedRecipeDetail').style.display = 'block';
+            document.getElementById('selectedRecipeDetail').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showDiary(element, member) {
+            document.querySelectorAll('#diary .member-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // 각 구성원별 다른 데이터 표시 가능
+            alert(`${member}의 식사 기록을 불러옵니다.`);
+        }
+
+        function showProfile(element, member) {
+            document.querySelectorAll('#profile .member-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // 각 구성원별 다른 프로필 표시 가능
+            alert(`${member}의 프로필을 불러옵니다.`);
+        }
+
+        function openMemberModal() {
+            document.getElementById('memberModal').classList.add('active');
+        }
+
+        function closeMemberModal() {
+            document.getElementById('memberModal').classList.remove('active');
+        }
+
+        function addMember() {
+            const relation = document.getElementById('newMemberRelation').value;
+            const name = document.getElementById('newMemberName').value;
+            const age = document.getElementById('newMemberAge').value;
+
+            if (!name || !age) {
+                alert('이름과 나이를 모두 입력해주세요.');
+                return;
+            }
+
+            alert(`${relation} ${name}(${age}세)이(가) 추가되었습니다!`);
+            closeMemberModal();
+            
+            // 실제로는 여기서 새 구성원을 목록에 추가
+        }
+
+        // 모달 외부 클릭시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('memberModal');
+            if (event.target === modal) {
+                closeMemberModal();
+            }
+        }
+    </script>
 </body>
 </html>
